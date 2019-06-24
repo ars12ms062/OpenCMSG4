@@ -5,10 +5,13 @@
 /detector/trackerMode 111111
 /detector/ecalMode 111
 
+/control/verbose 0
+/run/verbose 0
+
 /run/initialize
 
 /generator particle
-/generator/particle/type gamma
+/generator/particle/type e+
 /generator/particle/momentum 10 GeV
 /analysis/setFileName OpenCMSG4_particle.root
 

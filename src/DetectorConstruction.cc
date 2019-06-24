@@ -79,7 +79,7 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
 
-  G4bool checkOverlaps = true;
+  G4bool checkOverLaps = false;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// MATERIALS //////////////////////////////////////////////
@@ -218,7 +218,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                       0,                     //its mother  volume
                       false,                 //no boolean operation
                       0,                     //copy number
-                      checkOverlaps);        //overlaps checking
+                      checkOverLaps);        //overlaps checking
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// TRACKER ///////////////////////////////////////////////
@@ -264,14 +264,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		auto PIBSupp_Solid = new G4Tubs("PIBSupport_Solid", PIB_rMin[i]*mm-PIBSup_thick*mm, PIB_rMin[i]*mm, 285*mm, 90*deg, trPhiAng*deg);
 		auto PIBSupp_Logical = new G4LogicalVolume(PIBSupp_Solid,elAl,"PIBSupport_Logical");
 		if(nonSens && PIB)
-		new G4PVPlacement(0, G4ThreeVector(), PIBSupp_Logical, "PixelInnerBarrelSupport", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(), PIBSupp_Logical, "PixelInnerBarrelSupport", trackerLogical, false, i, checkOverLaps);
 
 		auto PIB_Solid 
 			= new G4Tubs("PIB_Solid", PIB_rMin[i]*mm, PIB_rMin[i]*mm+PIB_thick*um, PIB_halfz*mm, 90*deg, trPhiAng*deg);
 		PIB_Logical[i]
     		= new G4LogicalVolume(PIB_Solid,elSi,"PIB_Logical");
 		if(PIB)
-		new G4PVPlacement(0, G4ThreeVector(), PIB_Logical[i], "PixelInnerBarrel", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(), PIB_Logical[i], "PixelInnerBarrel", trackerLogical, false, i, checkOverLaps);
 		
 		G4double Pix_rMat = PIB_rMin[i]*mm+PIB_thick*um;
 		for(unsigned int mat_ctr=0; mat_ctr<pixBarMat.size(); mat_ctr++)
@@ -280,58 +280,58 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			Pix_rMat = Pix_rMat+PIBMat_thick[mat_ctr]*um;
 			auto PixBarMat_Logical = new G4LogicalVolume(PixBarMat_Solid,pixBarMat[mat_ctr],"PIBMaterials_Logical");
 			if(nonSens && PIB)
-			new G4PVPlacement(0, G4ThreeVector(), PixBarMat_Logical, "PixelInnerBarrelMaterial", trackerLogical, false, 0, true);
+			new G4PVPlacement(0, G4ThreeVector(), PixBarMat_Logical, "PixelInnerBarrelMaterial", trackerLogical, false, 0, checkOverLaps);
 		}
 	}
 
 	auto PIBMat_Solid = new G4Tubs("PIBCables_Solid", PIB_thick*um+44555*um, PIB_thick*um+44555*um+300*um, 0.5*(177-66)*mm, 90*deg, trPhiAng*deg);
 	auto PIBMat_Logical = new G4LogicalVolume(PIBMat_Solid,Cu,"PIBCables_Logical");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(66+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(66+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(66+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(66+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 1, checkOverLaps);
 
 	PIBMat_Solid = new G4Tubs("PIBCables_Solid", PIB_thick*um+44555*um, PIB_thick*um+44555*um+700*um, 0.5*(285-177)*mm, 90*deg, trPhiAng*deg);
 	PIBMat_Logical = new G4LogicalVolume(PIBMat_Solid,Cu,"PIBCables_Logical");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(285+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 2, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(285+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 2, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(285+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 3, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(285+177)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 3, checkOverLaps);
 
 	PIBMat_Solid = new G4Tubs("PIBCables_Solid", PIB_thick*um+73555*um, PIB_thick*um+73555*um+300*um, 0.5*(285-110)*mm, 90*deg, trPhiAng*deg);
 	PIBMat_Logical = new G4LogicalVolume(PIBMat_Solid,Cu,"PIBCables_Logical");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(285+110)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 4, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(285+110)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 4, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(285+110)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 5, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(285+110)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 5, checkOverLaps);
 
 	PIBMat_Solid = new G4Tubs("PIBCables_Solid", PIB_thick*um+102555*um, PIB_thick*um+102555*um+300*um, 0.5*(285-153)*mm, 90*deg, trPhiAng*deg);
 	PIBMat_Logical = new G4LogicalVolume(PIBMat_Solid,Cu,"PIBCables_Logical");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(285+153)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 6, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(285+153)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 6, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(285+153)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 7, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(285+153)*mm), PIBMat_Logical, "PixelInnerBarrelCables", trackerLogical, false, 7, checkOverLaps);
 
 	auto PIBSupp_Solid = new G4Tubs("PIBSupport_Solid", 40*mm, 180*mm, 0.5*PIBSup_thick*mm, 90*deg, trPhiAng*deg);
 	auto PIBSupp_Logical = new G4LogicalVolume(PIBSupp_Solid,elAl,"PIBSupport_Logical");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,285*mm+0.5*PIBSup_thick*mm), PIBSupp_Logical, "PixelInnerBarrelSupport", trackerLogical, false, PIB_num, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,285*mm+0.5*PIBSup_thick*mm), PIBSupp_Logical, "PixelInnerBarrelSupport", trackerLogical, false, PIB_num, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-285*mm-0.5*PIBSup_thick*mm), PIBSupp_Logical, "PixelInnerBarrelSupport", trackerLogical, false, PIB_num+1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-285*mm-0.5*PIBSup_thick*mm), PIBSupp_Logical, "PixelInnerBarrelSupport", trackerLogical, false, PIB_num+1, checkOverLaps);
 
 	auto PIBCables_Solid = new G4Tubs("PIBCables_Solid", 40*mm, 180*mm, 0.5*PIBCables_thick*um, 90*deg, trPhiAng*deg);
 	auto PIBCables_Logical = new G4LogicalVolume(PIBCables_Solid,Cu,"PIBCables_Logical");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,285*mm+PIBSup_thick*mm+0.5*PIBCables_thick*um), PIBCables_Logical, "PixelInnerBarrelCables", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,285*mm+PIBSup_thick*mm+0.5*PIBCables_thick*um), PIBCables_Logical, "PixelInnerBarrelCables", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-285*mm-PIBSup_thick*mm-0.5*PIBCables_thick*um), PIBCables_Logical, "PixelInnerBarrelCables", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-285*mm-PIBSup_thick*mm-0.5*PIBCables_thick*um), PIBCables_Logical, "PixelInnerBarrelCables", trackerLogical, false, 1, checkOverLaps);
 
 	auto PIBCables_Solid2 = new G4Tubs("PIBCables_Solid2", 180*mm, 180*mm+1000*um, 0.5*290*mm, 90*deg, trPhiAng*deg);
 	auto PIBCables_Logical2 = new G4LogicalVolume(PIBCables_Solid2,elAl,"PIBCables_Logical2");
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,285*mm+PIBSup_thick*mm+PIBCables_thick*um+0.5*290*mm), PIBCables_Logical2, "PixelInnerBarrelCables2", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,285*mm+PIBSup_thick*mm+PIBCables_thick*um+0.5*290*mm), PIBCables_Logical2, "PixelInnerBarrelCables2", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && PIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-285*mm-PIBSup_thick*mm-PIBCables_thick*um-0.5*290*mm), PIBCables_Logical2, "PixelInnerBarrelCables2", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-285*mm-PIBSup_thick*mm-PIBCables_thick*um-0.5*290*mm), PIBCables_Logical2, "PixelInnerBarrelCables2", trackerLogical, false, 1, checkOverLaps);
 
 	for(G4int i=0; i<PID_num; i++)
 	{
@@ -340,7 +340,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		PID_Logical[i]
     		= new G4LogicalVolume(PID_Solid,elSi,"PID_Logical");
 		if(PID)
-		new G4PVPlacement(0, G4ThreeVector(0.,0.,PID_posz[i]*mm), PID_Logical[i], "PixelInnerDiscs", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(0.,0.,PID_posz[i]*mm), PID_Logical[i], "PixelInnerDiscs", trackerLogical, false, i, checkOverLaps);
 
 		G4double Pix_zMat = PID_posz[i]*mm+PID_halfz*um;
 		for(unsigned int mat_ctr=0; mat_ctr<pixECMat.size(); mat_ctr++)
@@ -349,7 +349,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			auto PixECMat_Logical = new G4LogicalVolume(PixECMat_Solid,pixECMat[mat_ctr],"PIDMaterials_Logical");
 			Pix_zMat += 0.5*PIDMat_thick[mat_ctr]*um;
 			if(nonSens && PID)
-			new G4PVPlacement(0, G4ThreeVector(0.,0.,Pix_zMat), PixECMat_Logical, "PixelInnerDiskMaterial", trackerLogical, false, 0, true);
+			new G4PVPlacement(0, G4ThreeVector(0.,0.,Pix_zMat), PixECMat_Logical, "PixelInnerDiskMaterial", trackerLogical, false, 0, checkOverLaps);
 			Pix_zMat += 0.5*PIDMat_thick[mat_ctr]*um;
 		}
 	}
@@ -359,19 +359,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		auto PIDMat_Solid = new G4Tubs("PIDSupportSolid", 150*mm, 150*mm+PIDMat_thick[0]*um, 0.5*25*mm, 90*deg, trPhiAng*deg);
 		auto PIDMat_Logical = new G4LogicalVolume(PIDMat_Solid, elAl, "PIDSupportLogical");
 		if(nonSens && PID)
-		new G4PVPlacement(0, G4ThreeVector(0,0,PID_posz[i]), PIDMat_Logical, "PixelInnerDiskSupport", trackerLogical, false, 2+2*i, true);
+		new G4PVPlacement(0, G4ThreeVector(0,0,PID_posz[i]), PIDMat_Logical, "PixelInnerDiskSupport", trackerLogical, false, 2+2*i, checkOverLaps);
 		PIDMat_Solid = new G4Tubs("PIDSupportSolid", 150*mm+PIDMat_thick[0]*um, 150*mm+PIDMat_thick[0]*um+PIDMat_thick[1]*um, 0.5*25*mm, 90*deg, trPhiAng*deg);
 		PIDMat_Logical = new G4LogicalVolume(PIDMat_Solid, elAl, "PIDSupportLogical");
 		if(nonSens && PID)
-		new G4PVPlacement(0, G4ThreeVector(0,0,PID_posz[i]), PIDMat_Logical, "PixelInnerDiskSupport", trackerLogical, false, 3+2*i, true);
+		new G4PVPlacement(0, G4ThreeVector(0,0,PID_posz[i]), PIDMat_Logical, "PixelInnerDiskSupport", trackerLogical, false, 3+2*i, checkOverLaps);
 	}
 
 	auto PIDCables_Solid = new G4Tubs("PIDCables_Solid", 150*mm+PIDMat_thick[0]*um+PIDMat_thick[1]*um, 150*mm+PIDMat_thick[0]*um+PIDMat_thick[1]*um+750*um, 0.5*2000*mm, 90*deg, trPhiAng*deg);
 	auto PIDCables_Logical = new G4LogicalVolume(PIDCables_Solid,Cu,"PIDCables_Logical");
 	if(nonSens && PID)
-	new G4PVPlacement(0, G4ThreeVector(0,0,PID_posz[0]+1000*mm), PIDCables_Logical, "PixelInnerDiskCables", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,PID_posz[0]+1000*mm), PIDCables_Logical, "PixelInnerDiskCables", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && PID)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-PID_posz[0]-1000*mm), PIDCables_Logical, "PixelInnerDiskCables", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-PID_posz[0]-1000*mm), PIDCables_Logical, "PixelInnerDiskCables", trackerLogical, false, 1, checkOverLaps);
 
 
 ///////////////////////////////// TRACKER PIXEL REGION ENDS ///////////////////////////////////
@@ -386,7 +386,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		TIB_Logical[i]
     		= new G4LogicalVolume(TIB_Solid,elSi,"TIB_Logical");
 		if(TIB)
-		new G4PVPlacement(0, G4ThreeVector(), TIB_Logical[i], "TrackerStripInnerBarrel", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(), TIB_Logical[i], "TrackerStripInnerBarrel", trackerLogical, false, i, checkOverLaps);
 
 		TIBr = TIB_rMin[i]*mm+TIB_thick[i]*um*(4.0/3);
 		for(unsigned int j=0; j<TIBMat.size(); j++)
@@ -395,9 +395,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			TIBr += ((i==0||i==1)&&j==1?2*TIBSupp_thick[j]:TIBSupp_thick[j])*um;
 			auto TIBSupp_Logical = new G4LogicalVolume(TIBSupp_Solid,TIBMat[j],"TIBSupp_Logical");
 			if(nonSens && TIB)
-			new G4PVPlacement(0, G4ThreeVector(), TIBSupp_Logical, "TIBSupport", trackerLogical, false, 0, true);
+			new G4PVPlacement(0, G4ThreeVector(), TIBSupp_Logical, "TIBSupport", trackerLogical, false, 0, checkOverLaps);
 			if(nonSens && TIB)
-			new G4PVPlacement(0, G4ThreeVector(), TIBSupp_Logical, "TIBSupport", trackerLogical, false, 0, true);
+			new G4PVPlacement(0, G4ThreeVector(), TIBSupp_Logical, "TIBSupport", trackerLogical, false, 0, checkOverLaps);
 		}
 
 		for(unsigned int j=0; j<5; j++)
@@ -406,25 +406,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			TIBr += TIBEle_thick*um;
 			auto TIBEle_Logical = new G4LogicalVolume(TIBEle_Solid, Cu, "TIBEle_Logical");
 			if(nonSens && TIB)
-			new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(700+TIBSupp_pos[j])*mm), TIBEle_Logical, "TIBElectricals", trackerLogical, false, i*j, true);		
+			new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(700+TIBSupp_pos[j])*mm), TIBEle_Logical, "TIBElectricals", trackerLogical, false, i*j, checkOverLaps);		
 			if(nonSens && TIB)
-			new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(700+TIBSupp_pos[j])*mm), TIBEle_Logical, "TIBElectricals", trackerLogical, false, i*j, true);		
+			new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(700+TIBSupp_pos[j])*mm), TIBEle_Logical, "TIBElectricals", trackerLogical, false, i*j, checkOverLaps);		
 		}		
 	}
 
 	auto TIBEC_Solid = new G4Tubs("TIBEC_Solid", TIB_rMin[0]*mm, 500*mm, TIBSupp_thick[0]*um, 90*deg, trPhiAng*deg);
 	auto TIBEC_Logical = new G4LogicalVolume(TIBEC_Solid,Cu,"TIBEC_Logical");
 	if(nonSens && TIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,700*mm+TIBSupp_thick[0]*um), TIBEC_Logical, "TIBEndCapSupport", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,700*mm+TIBSupp_thick[0]*um), TIBEC_Logical, "TIBEndCapSupport", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && TIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-700*mm-TIBSupp_thick[0]*um), TIBEC_Logical, "TIBEndCapSupport", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-700*mm-TIBSupp_thick[0]*um), TIBEC_Logical, "TIBEndCapSupport", trackerLogical, false, 1, checkOverLaps);
 
 	auto TIBD_Solid = new G4Tubs("TIBtoD_Solid", TIBr, TIBr+2400*um, 0.5*(TIDECSupp_pos-TIBSupp_pos[4])*mm, 90*deg, trPhiAng*deg);
 	auto TIBD_Logical = new G4LogicalVolume(TIBD_Solid,Cu,"TIBtoD_Logical");
 	if(nonSens && TIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(TIDECSupp_pos+TIBSupp_pos[4])*mm), TIBD_Logical, "TIBtoDSupport", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(TIDECSupp_pos+TIBSupp_pos[4])*mm), TIBD_Logical, "TIBtoDSupport", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && TIB)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(TIDECSupp_pos+TIBSupp_pos[4])*mm), TIBD_Logical, "TIBtoDSupport", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(TIDECSupp_pos+TIBSupp_pos[4])*mm), TIBD_Logical, "TIBtoDSupport", trackerLogical, false, 1, checkOverLaps);
 
 	for(G4int i=0; i<TID_num;i=i+2)
 	{
@@ -433,41 +433,41 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		TID_Logical[i]
     		= new G4LogicalVolume(TID_Solid,elSi,"TID_Logical");
 		if(TID)
-		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*TID_posz[i%3]*mm), TID_Logical[i], "TrackerStripInnerDisks", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*TID_posz[i%3]*mm), TID_Logical[i], "TrackerStripInnerDisks", trackerLogical, false, i, checkOverLaps);
 		TID_Solid 
 			= new G4Tubs("TID_Solid", 400*mm, 500*mm, 160*um*(4.0/3), 90*deg, trPhiAng*deg);
 		TID_Logical[i+1]
     		= new G4LogicalVolume(TID_Solid,elSi,"TID_Logical");
 		if(TID)
-		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*TID_posz[i%3]*mm), TID_Logical[i+1], "TrackerStripInnerDisks", trackerLogical, false, i+1, true);
+		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*TID_posz[i%3]*mm), TID_Logical[i+1], "TrackerStripInnerDisks", trackerLogical, false, i+1, checkOverLaps);
 
 		auto TIDSupp_Solid 
 			= new G4Tubs("TIDSupp_Solid", 200*mm, 400*mm, 0.5*TIDSupp_thick*um, 90*deg, trPhiAng*deg);
 		auto TIDSupp_Logical
     		= new G4LogicalVolume(TIDSupp_Solid,elAl,"TIDSupp_Logical");
 		if(nonSens && TID)
-		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*(TID_posz[i%3]*mm+2*320*um*(4.0/3)+0.5*TIDSupp_thick*um)), TIDSupp_Logical, "TIDSupport", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*(TID_posz[i%3]*mm+2*320*um*(4.0/3)+0.5*TIDSupp_thick*um)), TIDSupp_Logical, "TIDSupport", trackerLogical, false, i, checkOverLaps);
 		TIDSupp_Solid 
 			= new G4Tubs("TIDSupp_Solid", 400*mm, 500*mm, 0.5*TIDSupp_thick*um, 90*deg, trPhiAng*deg);
 		TIDSupp_Logical
     		= new G4LogicalVolume(TIDSupp_Solid,elAl,"TIDSupp_Logical");
 		if(nonSens && TID)
-		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*(TID_posz[i%3]*mm+2*160*um*(4.0/3)+0.5*TIDSupp_thick*um)), TIDSupp_Logical, "TIDSupport", trackerLogical, false, i+1, true);
+		new G4PVPlacement(0, G4ThreeVector(0.,0.,pow(-1,i>=TID_num/2?1:0)*(TID_posz[i%3]*mm+2*160*um*(4.0/3)+0.5*TIDSupp_thick*um)), TIDSupp_Logical, "TIDSupport", trackerLogical, false, i+1, checkOverLaps);
 	}
 
 	auto TIDSupp_Solid = new G4Tubs("TIDSupp_Solid", 220, 500*mm+2400*um, 0.5*TIDSupp_thick*um, 90*deg, trPhiAng*deg);
 	auto TIDSupp_Logical = new G4LogicalVolume(TIDSupp_Solid,elAl,"TIDSupp_Logical");
 	if(nonSens && TID)
-	new G4PVPlacement(0, G4ThreeVector(0,0,TIDECSupp_pos*mm+0.5*TIDSupp_thick*um), TIDSupp_Logical, "TIDSupport", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,TIDECSupp_pos*mm+0.5*TIDSupp_thick*um), TIDSupp_Logical, "TIDSupport", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && TID)
-	new G4PVPlacement(0, G4ThreeVector(0,0,-TIDECSupp_pos*mm-0.5*TIDSupp_thick*um), TIDSupp_Logical, "TIDSupport", trackerLogical, false, 1, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,-TIDECSupp_pos*mm-0.5*TIDSupp_thick*um), TIDSupp_Logical, "TIDSupport", trackerLogical, false, 1, checkOverLaps);
 
 	auto TIDEle_Solid = new G4Tubs("TIDEle_Solid", 200*mm-TIDEle_thick*um, 200*mm, 0.5*(1050-564)*mm, 90*deg, trPhiAng*deg);
 	auto TIDEle_Logical = new G4LogicalVolume(TIDEle_Solid, Cu, "TIDEle_Logical");
 	if(nonSens && TID)
-	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(1050+564)*mm), TIDEle_Logical, "TIDElectricals", trackerLogical, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0.5*(1050+564)*mm), TIDEle_Logical, "TIDElectricals", trackerLogical, false, 0, checkOverLaps);
 	if(nonSens && TID)		
-	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(1050+564)*mm), TIDEle_Logical, "TIDElectricals", trackerLogical, false, 1, true);		
+	new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*(1050+564)*mm), TIDEle_Logical, "TIDElectricals", trackerLogical, false, 1, checkOverLaps);		
 
 //////////////////////////// TRACKER STRIP INNER REGION ENDS //////////////////////////////////
 //////////////////////////// TRACKER STRIP OUTER REGION STARTS ////////////////////////////////
@@ -479,7 +479,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		TOB_Logical[i]
     		= new G4LogicalVolume(TOB_Solid,elSi,"TOB_Logical");
 		if(TOB)
-		new G4PVPlacement(0, G4ThreeVector(), TOB_Logical[i], "TrackerStripOuterBarrel", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(), TOB_Logical[i], "TrackerStripOuterBarrel", trackerLogical, false, i, checkOverLaps);
 
 		G4double rEleCool_min = TOB_rMin[i]*mm+TOB_thick[i]*um*(4.0/3);
 		for(unsigned int j=0; j<TOBMat.size(); j++)
@@ -488,31 +488,31 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			rEleCool_min = rEleCool_min+TOBEleCool_dr[j]*um;
 			auto TOBEleCool_Logical = new G4LogicalVolume(TOBEleCool_Solid, TOBMat[j], "TOBEleCool_Logical");
 			if(nonSens && TOB)
-			new G4PVPlacement(0, G4ThreeVector(), TOBEleCool_Logical, "TOBElectricalsCoolants", trackerLogical, false, i*TOBMat.size()+j, true);		
+			new G4PVPlacement(0, G4ThreeVector(), TOBEleCool_Logical, "TOBElectricalsCoolants", trackerLogical, false, i*TOBMat.size()+j, checkOverLaps);		
 		}		
 
 		auto TOBWiring1_Solid = new G4Tubs("TOBWiring1_Solid", rEleCool_min, rEleCool_min+rWiring1*um, 0.5*(1180*mm-zWiring1*mm), 90*deg, trPhiAng*deg);
 		rEleCool_min = rEleCool_min+rWiring1*um;
 		auto TOBWiring1_Logical = new G4LogicalVolume(TOBWiring1_Solid, Pb, "TOBWiring1_Logical");
 		if(nonSens && TOB)
-		new G4PVPlacement(0, G4ThreeVector(0,0,0.5*zWiring1*mm+0.5*1180*mm), TOBWiring1_Logical, "TOBWiringFirstLayer", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(0,0,0.5*zWiring1*mm+0.5*1180*mm), TOBWiring1_Logical, "TOBWiringFirstLayer", trackerLogical, false, i, checkOverLaps);
 		if(nonSens && TOB)
-		new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*zWiring1*mm-0.5*1180*mm), TOBWiring1_Logical, "TOBWiringFirstLayer", trackerLogical, false, i, true);		
+		new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*zWiring1*mm-0.5*1180*mm), TOBWiring1_Logical, "TOBWiringFirstLayer", trackerLogical, false, i, checkOverLaps);		
 
 		auto TOBWiring2_Solid = new G4Tubs("TOBWiring2_Solid", rEleCool_min, rEleCool_min+rWiring2*um, 0.5*(1180*mm-zWiring2*mm), 90*deg, trPhiAng*deg);
 		rEleCool_min = rEleCool_min+rWiring2*um;
 		auto TOBWiring2_Logical = new G4LogicalVolume(TOBWiring2_Solid, Pb, "TOBWiring2_Logical");
 		if(nonSens && TOB)
-		new G4PVPlacement(0, G4ThreeVector(0,0,0.5*zWiring2*mm+0.5*1180*mm), TOBWiring2_Logical, "TOBWiringSecondLayer", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(0,0,0.5*zWiring2*mm+0.5*1180*mm), TOBWiring2_Logical, "TOBWiringSecondLayer", trackerLogical, false, i, checkOverLaps);
 		if(nonSens && TOB)
-		new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*zWiring2*mm-0.5*1180*mm), TOBWiring2_Logical, "TOBWiringSecondLayer", trackerLogical, false, i, true);		
+		new G4PVPlacement(0, G4ThreeVector(0,0,-0.5*zWiring2*mm-0.5*1180*mm), TOBWiring2_Logical, "TOBWiringSecondLayer", trackerLogical, false, i, checkOverLaps);		
 
 		auto TOBSupp1_Solid = new G4Tubs("TOBSupp1_Solid", rEleCool_min-0.5*rSupp*mm, rEleCool_min+0.5*rSupp*mm, 0.5*zSupp1*mm, 90*deg, trPhiAng*deg);
 		auto TOBSupp1_Logical = new G4LogicalVolume(TOBSupp1_Solid, elAl, "TOBSupp1_Logical");
 		if(nonSens && TOB)
-		new G4PVPlacement(0, G4ThreeVector(0,0,1180*mm+0.5*zSupp1*mm), TOBSupp1_Logical, "TOBSupportFirstLayer", trackerLogical, false, i, true);
+		new G4PVPlacement(0, G4ThreeVector(0,0,1180*mm+0.5*zSupp1*mm), TOBSupp1_Logical, "TOBSupportFirstLayer", trackerLogical, false, i, checkOverLaps);
 		if(nonSens && TOB)
-		new G4PVPlacement(0, G4ThreeVector(0,0,-1180*mm-0.5*zSupp1*mm), TOBSupp1_Logical, "TOBSupportFirstLayer", trackerLogical, false, i, true);		
+		new G4PVPlacement(0, G4ThreeVector(0,0,-1180*mm-0.5*zSupp1*mm), TOBSupp1_Logical, "TOBSupportFirstLayer", trackerLogical, false, i, checkOverLaps);		
 
 		if(i==0)
 		{
@@ -523,16 +523,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			auto TOBSupp2_Solid = new G4Tubs("TOBSupp2_Solid", rEleCool_min_hist+0.5*rSupp*mm, rEleCool_min-0.5*rSupp*mm, 0.5*zSupp2*mm, 90*deg, trPhiAng*deg);
 			auto TOBSupp2_Logical = new G4LogicalVolume(TOBSupp2_Solid, elAl, "TOBSupp2_Logical");
 			if(nonSens && TOB)
-			new G4PVPlacement(0, G4ThreeVector(0,0,1180*mm+zSupp1*mm+0.5*zSupp2*mm), TOBSupp2_Logical, "TOBSupportSecondLayer", trackerLogical, false, i, true);
+			new G4PVPlacement(0, G4ThreeVector(0,0,1180*mm+zSupp1*mm+0.5*zSupp2*mm), TOBSupp2_Logical, "TOBSupportSecondLayer", trackerLogical, false, i, checkOverLaps);
 			if(nonSens && TOB)
-			new G4PVPlacement(0, G4ThreeVector(0,0,-1180*mm-zSupp1*mm-0.5*zSupp2*mm), TOBSupp2_Logical, "TOBSupportSecondLayer", trackerLogical, false, i, true);	
+			new G4PVPlacement(0, G4ThreeVector(0,0,-1180*mm-zSupp1*mm-0.5*zSupp2*mm), TOBSupp2_Logical, "TOBSupportSecondLayer", trackerLogical, false, i, checkOverLaps);	
 
 			auto TOBSupp3_Solid = new G4Tubs("TOBSupp3_Solid", rEleCool_min_hist, TOB_rMin[i]*mm, 0.5*zSupp3*mm, 90*deg, trPhiAng*deg);
 			auto TOBSupp3_Logical = new G4LogicalVolume(TOBSupp3_Solid, elAl, "TOBSupp3_Logical");
 			if(nonSens && TOB)
-			new G4PVPlacement(0, G4ThreeVector(0,0,zSupp3Pos*mm), TOBSupp3_Logical, "TOBSupportThirdLayer", trackerLogical, false, i, true);
+			new G4PVPlacement(0, G4ThreeVector(0,0,zSupp3Pos*mm), TOBSupp3_Logical, "TOBSupportThirdLayer", trackerLogical, false, i, checkOverLaps);
 			if(nonSens && TOB)
-			new G4PVPlacement(0, G4ThreeVector(0,0,-zSupp3Pos*mm), TOBSupp3_Logical, "TOBSupportThirdLayer", trackerLogical, false, i, true);	
+			new G4PVPlacement(0, G4ThreeVector(0,0,-zSupp3Pos*mm), TOBSupp3_Logical, "TOBSupportThirdLayer", trackerLogical, false, i, checkOverLaps);	
 			rEleCool_min_hist = rEleCool_min;	
 		}
 	}
@@ -556,18 +556,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			TEC_Logical[tec_count]
     			= new G4LogicalVolume(TEC_Solid,elSi,"TEC_z+_Logical");
 			if(TEC)
-			new G4PVPlacement(0, G4ThreeVector(0,0,TEC_disk[disk-1][(ring-1)%2]*mm), TEC_Logical[tec_count], "TrackerEndCap", trackerLogical, false, tec_count, true);
+			new G4PVPlacement(0, G4ThreeVector(0,0,TEC_disk[disk-1][(ring-1)%2]*mm), TEC_Logical[tec_count], "TrackerEndCap", trackerLogical, false, tec_count, checkOverLaps);
 			if(TEC)
-			new G4PVPlacement(0, G4ThreeVector(0,0,-1*TEC_disk[disk-1][(ring-1)%2]*mm), TEC_Logical[tec_count], "TrackerEndCap", trackerLogical, false, tec_count, true);
+			new G4PVPlacement(0, G4ThreeVector(0,0,-1*TEC_disk[disk-1][(ring-1)%2]*mm), TEC_Logical[tec_count], "TrackerEndCap", trackerLogical, false, tec_count, checkOverLaps);
 
 			auto TECMat_Solid 
 				= new G4Tubs("TECMat_Solid", TEC_ring[ring-1][0]*mm, TEC_ring[ring-1][1]*mm, 0.5*TECMat_thick*mm, 90*deg, trPhiAng*deg);
 			auto TECMat_Logical
     			= new G4LogicalVolume(TECMat_Solid,TECMat[0],"TECMat_Logical");
 			if(nonSens && TEC)
-			new G4PVPlacement(0, G4ThreeVector(0,0,TEC_disk[disk-1][(ring-1)%2]*mm+TEC_thick*um+0.5*TECMat_thick*mm), TECMat_Logical, "TrackerEndCapMaterial", trackerLogical, false, tec_count, true);
+			new G4PVPlacement(0, G4ThreeVector(0,0,TEC_disk[disk-1][(ring-1)%2]*mm+TEC_thick*um+0.5*TECMat_thick*mm), TECMat_Logical, "TrackerEndCapMaterial", trackerLogical, false, tec_count, checkOverLaps);
 			if(nonSens && TEC)
-			new G4PVPlacement(0, G4ThreeVector(0,0,-TEC_disk[disk-1][(ring-1)%2]*mm-TEC_thick*um-0.5*TECMat_thick*mm), TECMat_Logical, "TrackerEndCapMaterial", trackerLogical, false, tec_count, true);
+			new G4PVPlacement(0, G4ThreeVector(0,0,-TEC_disk[disk-1][(ring-1)%2]*mm-TEC_thick*um-0.5*TECMat_thick*mm), TECMat_Logical, "TrackerEndCapMaterial", trackerLogical, false, tec_count, checkOverLaps);
 
 			tec_count++;
 		}
@@ -633,9 +633,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double ecalECenv_r = 1711.0;
 	auto ecalECSolid = new G4Tubs("ECalECSolid", 0, ecalECenv_r*mm, 0.5*ecalECenv_z*mm, 0, 360.0*deg);
 	ecalECLogical_r = new G4LogicalVolume(ecalECSolid, world_mat, "ECalECLogical");
-	new G4PVPlacement(0, G4ThreeVector(0, 0, (3205+110)*mm), ecalECLogical_r, "ECalECEnvelopeRight", logicWorld, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0, 0, (3205+110)*mm), ecalECLogical_r, "ECalECEnvelopeRight", logicWorld, false, 0, checkOverLaps);
 	ecalECLogical_l = new G4LogicalVolume(ecalECSolid, world_mat, "ECalECLogical");
-	new G4PVPlacement(0, G4ThreeVector(0, 0, -(3205+110)*mm), ecalECLogical_l, "ECalECEnvelopeLeft", logicWorld, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0, 0, -(3205+110)*mm), ecalECLogical_l, "ECalECEnvelopeLeft", logicWorld, false, 0, checkOverLaps);
 
 	// ECal End Cap Parameterised Placement of Crytals
 
@@ -681,9 +681,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double PSECenv_rMax = 1230*mm;
 	auto PSECenvSolid = new G4Tubs("PSECenvSolid", PSECenv_rMin, PSECenv_rMax, PSECenv_dz, 0, 360.0*deg);
 	ecalPSLogical_r = new G4LogicalVolume(PSECenvSolid, world_mat, "PSECenvLogical_r");
-	new G4PVPlacement(0, G4ThreeVector(0, 0, PSECenv_zpos), ecalPSLogical_r, "PSECEnvelopeRight", logicWorld, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0, 0, PSECenv_zpos), ecalPSLogical_r, "PSECEnvelopeRight", logicWorld, false, 0, checkOverLaps);
 	ecalPSLogical_l = new G4LogicalVolume(PSECenvSolid, world_mat, "PSECenvLogical_l");
-	new G4PVPlacement(0, G4ThreeVector(0, 0, -PSECenv_zpos), ecalPSLogical_l, "PSECEnvelopeLeft", logicWorld, false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0, 0, -PSECenv_zpos), ecalPSLogical_l, "PSECEnvelopeLeft", logicWorld, false, 0, checkOverLaps);
 
 	// PreShower End Cap Parameterised Placement of Crytals
 	G4double PShowPos = -PSECenv_dz;
@@ -692,9 +692,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		PShowPos += 0.5*PShower_thick[cNo];
 		auto PSECSolid = new G4Tubs("PSECSolid", PSECenv_rMin, PSECenv_rMax, 0.5*PShower_thick[cNo], 0, 360.0*deg);
 		cellEcalPS_l.push_back(new G4LogicalVolume(PSECSolid, PShowerMat[cNo], "PSECLogical_l"));
-		new G4PVPlacement(0, G4ThreeVector(0, 0, PShowPos), cellEcalPS_l[cNo], "PSECLeftPhysical", ecalPSLogical_l, false, 0, true);
+		new G4PVPlacement(0, G4ThreeVector(0, 0, PShowPos), cellEcalPS_l[cNo], "PSECLeftPhysical", ecalPSLogical_l, false, 0, checkOverLaps);
 		cellEcalPS_r.push_back(new G4LogicalVolume(PSECSolid, PShowerMat[cNo], "PSECLogical_r"));
-		new G4PVPlacement(0, G4ThreeVector(0, 0, PShowPos), cellEcalPS_r[cNo], "PSECRightPhysical", ecalPSLogical_r, false, 0, true);
+		new G4PVPlacement(0, G4ThreeVector(0, 0, PShowPos), cellEcalPS_r[cNo], "PSECRightPhysical", ecalPSLogical_r, false, 0, checkOverLaps);
 		PShowPos += 0.5*PShower_thick[cNo];
 	}
 

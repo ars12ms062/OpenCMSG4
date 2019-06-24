@@ -42,32 +42,35 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
 	G4StepPoint* preStep;
 
 	// Condition to select converted photons
-	if(	num_secondary>=1 && 					// more than one daughter
-		(!(prPhVol->GetName()!="ECalCell") || 	// outside the ECal vol
-			!(prPhVol->GetName()!="CellEcalEC_r") || 
-			!(prPhVol->GetName()!="CellEcalEC_l")) && 
+	if(	(num_secondary>=1) && 					// more than one daughter
+		!( (prPhVol->GetName()=="ECalCell") || 	// outside the ECal vol
+		  (prPhVol->GetName()=="PSECLeftPhysical") || 
+		  (prPhVol->GetName()=="PSECRightPhysical") || 
+		  (prPhVol->GetName()=="CellEcalEC_r") || 
+		  (prPhVol->GetName()=="CellEcalEC_l")
+		  ) && 
 		(prTrackID==1)	)						// primary track
 	{
 		// Individual secondary track
 		secondaries_track = theStep->GetSecondaryInCurrentStep();
 		preStep = theStep->GetPreStepPoint();
 
-		G4cout<<pos/mm<<" ||";
+		//G4cout<<pos/mm<<" ||";
 
 		fEventAction->SetConvertedVertex(pos/mm);
 
 		for(G4int i=0; i<num_secondary; i++)
 		{
 			// Print the daughter tracks
-			G4cout<<i<<"\t"<<preStep->GetTotalEnergy()<<"\t";
-			G4cout
-				<<secondaries_track->at(i)->GetParticleDefinition()->GetParticleName()
-				<<"\t"<<secondaries_track->at(i)->GetTotalEnergy()/MeV
-				<<" (MeV)\t"<<secondaries_track->at(i)->GetVolume()->GetName()
-				<<"\t"<<prPhVol->GetName()<<"|||";
+			//G4cout<<i<<"\t"<<preStep->GetTotalEnergy()<<"\t";
+			//G4cout
+			//	<<secondaries_track->at(i)->GetParticleDefinition()->GetParticleName()
+			//	<<"\t"<<secondaries_track->at(i)->GetTotalEnergy()/MeV
+			//	<<" (MeV)\t"<<secondaries_track->at(i)->GetVolume()->GetName()
+			//	<<"\t"<<prPhVol->GetName()<<"|||";
 		}
 		fEventAction->set_pair_flag();			// increment the converted flag
-		G4cout<<G4endl;
+		//G4cout<<G4endl;
 	}
 
 	// Fill energy deposition to ntuples

@@ -62,12 +62,20 @@ void EventAction::EndOfEventAction(const G4Event* event)
   if ( printModulo==0 || event->GetEventID() % printModulo != 0) return;
   
   auto primary = event->GetPrimaryVertex(0)->GetPrimary(0);
+
+  /*
   G4cout 
     << G4endl
     << ">>> Event " << event->GetEventID() << " >>> Simulation truth : "
     << primary->GetG4code()->GetParticleName()
     << " " << primary->GetMomentum() << G4endl;
-  
+  */
+  G4cout 
+    << G4endl
+    << ">>> Event " << event->GetEventID() << " >>> starts"
+    /*<< primary->GetG4code()->GetParticleName()
+      << " " << primary->GetMomentum()*/ << G4endl;
+
   // EM calorimeter
   G4cout << "EM Calorimeter has " << totalEmHit << " hits. Total Edep is "
     << GetEmEne()/MeV << " (MeV)" << G4endl;
